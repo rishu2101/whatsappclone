@@ -1,0 +1,49 @@
+/* Popup style */
+.popup-box {
+  position: fixed;
+  background: #00000050;
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 99999;
+}
+
+.box {
+  position: relative;
+  width: 40%;
+  margin: 0 auto;
+  height: auto;
+  max-height: 70vh;
+  margin-top: calc(100vh - 85vh - 20px);
+  background-color: whitesmoke;
+  border-radius: 4px;
+  padding: 20px;
+  box-shadow: 0px 0px 7px 5px rgb(0, 0, 0, 0.2);
+  border: 1px solid #999;
+  overflow: auto;
+}
+.box > form {
+  margin: 8%;
+}
+.box > form > input {
+  padding: 10px;
+  width: 90%;
+  background-color: transparent;
+}
+
+.close-icon-popup {
+  top: 2%;
+  right: 2%;
+  position: absolute;
+  content: "x";
+  cursor: pointer;
+  background: #ededed;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  line-height: 20px;
+  text-align: center;
+  border: 1px solid #999;
+  font-size: 20px;
+}
