@@ -25,7 +25,7 @@ function Chatmsg(props) {
     const userName = user.user.email;
 
     var msg_type = '';
-    // console.log(props.timestamp);
+
     if (props.type === 'img') {
         var msg_text = <img src={props.msg} alt="Not Available" onClick={() => {
             props.setPopupImage(props.msg);
@@ -38,28 +38,18 @@ function Chatmsg(props) {
     if (userName === props.name) {
         return (
             <div className={`chat_body_msg chat_receiver ${msg_type}`}>
-                {/* <span className="chat_name">
-                    {props.name}
-                </span> */}
                     {msg_text}
-                    
-
                 <span className="chat_time">
-                {timeConverter(props.timestamp)}
-                    {/* {new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(props.timestamp)} */}
+                    {timeConverter(props.timestamp)}
                 </span>
             </div>
         )
     } else {
         return (
             <div className={`chat_body_msg ${msg_type}`}>
-                {/* <span className="chat_name">
-                    {props.name}
-                </span> */}
                     {msg_text}
                 <span className="chat_time">
                     {timeConverter(props.timestamp)}
-                    {/* {new Intl.DateTimeFormat('en-In', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(props.timestamp)} */}
                 </span>
             </div>
         )   

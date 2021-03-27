@@ -33,6 +33,25 @@ function Sidebar() {
 
   const [rooms, setRooms] = useState([]);
 
+
+  // function to add new chat when selected any email id from selectbox
+
+  const addNeChatBox = (chat_email) => {
+    db.collection(`chat`).add({
+      emails:[user.user.email,chat_email]
+    }).then(function(querySnapshot) {
+      setSearchResult([]);
+      setIsOpen(false);
+      setRooms([...rooms,{
+        email:chat_email,
+        id : querySnapshot.id
+      }]);
+      let path = `/${querySnapshot.id}`;
+      history.push(path);
+      
+    });   
+  }
+
   // function to logout user on button click
   const logoutuser = () => {
     localStorage.clear();
@@ -46,15 +65,23 @@ function Sidebar() {
   };
 
 
-  // function to filter chats
+  // function to filter emails for new chat
   const searchHandle = (searchText) => {
     setSearchResult([]);
     if (searchText !== "") {
+      var chat_list = rooms.map((room) => room.email)
       db.collection("chat_users")
         .where("email", "!=", user.user.email)
         .get()
         .then((querySnapshot) => {
-          setSearchResult(querySnapshot.docs.map((doc) => doc.data().email));
+          var filtered_email_list = [];
+          querySnapshot.docs.array.forEach(doc => {
+            if (chat_list.includes(doc.data().email) === 0) {
+              filtered_email_list = [...filtered_email_list, doc.data().email]
+            }
+          });
+          // setSearchResult(querySnapshot.docs.map((doc) => doc.data().email));
+          setSearchResult(filtered_email_list);
         })
         .catch((error) => {
             console.log("Error getting documents: ", error);
@@ -86,6 +113,16 @@ function Sidebar() {
           }
         });
         setRooms(room_array);
+        if (room_array.length == 0) {
+          db.collection(`chat`).add({
+            emails:[user.user.email,'rishabhjains348@gmail.com']
+          }).then(function(doc) {
+            setRooms([{
+              email:'rishabhjains348@gmail.com',
+              id:doc.id
+            }]);
+          });   
+        }
     })
     .catch((error) => {
         console.log("Error getting documents: ", error);
@@ -127,20 +164,20 @@ function Sidebar() {
 
       {isOpen && (
         <Popup
+        addNeChatBox={addNeChatBox}
           handleClose={togglePopup}
           searchResult={searchResult}
           searchHandle={searchHandle}
         />
       )}
       <div className="sidebar_chats">
-        {/* <SidebarChat key="new_chat" newChat="1" handlePopup={togglePopup} /> */}
         {rooms &&
           rooms
             .filter((roomName) => roomName.email.includes(searchinput))
             .map((room) => <SidebarChat id={room.id} name={room.email} key={room.id} />)}
       </div>
         <div className="sidebar_footer" onClick={togglePopup}>
-            <IconButton><ChatIcon/></IconButton>
+            <IconButton><ChatIcon/></IconButton>Add New Chat
         </div>
     </div>
   );

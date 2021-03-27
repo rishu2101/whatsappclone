@@ -18,7 +18,7 @@ function Popup(props) {
             <span className="close-icon-popup" onClick={props.handleClose}>x</span>
             <form>
                 <input placeholder="Search for..." onChange={(e) => { fetchSearchResult(e.target.value)}}/>
-                <Suggestions results={props.searchResult} searchInput={searchinput}/>
+                <Suggestions results={props.searchResult} searchInput={searchinput} addNeChatBox={props.addNeChatBox}/>
             </form>
         </div>
         </div>

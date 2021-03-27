@@ -14,27 +14,30 @@ function Login() {
     const signIn = () => {
        auth.signInWithPopup(provider).then(result => {
           localStorage.setItem('user', JSON.stringify(result.user));
-            dispatch({
-              type: actionTypes.SET_USER,
-              user:result.user,
-            });
+             //  check if user already exist if not then create new room
 
-        //  check if user already exist if not then create new room
+            db.collection("chat_users")
+              .where("email", "==", result.user.email)
+              .get()
+              .then((docSnapshot) => {
+                if (docSnapshot.docs.length === 0) {
+                  var docData = {
+                    email : result.user.email,
+                  };
+                  db.collection(`chat_users`).add(docData).then(function() {
+                    
+                  });
+              }
+                dispatch({
+                  type: actionTypes.SET_USER,
+                  user:result.user,
+                });
+              })
+          .catch((error) => {
+          });
+            
 
-        db.collection("chat_users")
-        .where("email", "==", result.user.email)
-        .get()
-        .then((docSnapshot) => {
-            if (docSnapshot.docs.length === 0) {
-              var docData = {
-                email : 'rjain@velsof.com'
-              };
-              db.collection(`chat_users`).add(docData).then(function() {
-              });
-          }
-        })
-    .catch((error) => {
-    });
+       
 
         })          
         .catch ((error) => console.log(error.message)

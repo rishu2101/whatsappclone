@@ -10,7 +10,7 @@ import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
 import {useParams} from 'react-router-dom';
 import  firebase from 'firebase';
 import SendIcon from '@material-ui/icons/Send';
-import { useHistory} from "react-router-dom";
+// import { useHistory} from "react-router-dom";
 import ShowFilePreview from './ShowFilePreview';
 
 
@@ -37,7 +37,7 @@ function Chat() {
     const [isOpen,setIsOpen] = useState(false);
     const [input,setInput] = useState('');
     const [showEmoticonBox, setShowEmoticonBox] = useState(false);
-    const history = useHistory();
+    // const history = useHistory();
     const [allmsg,setAllmsg] = useState([]);
     const [user,dispatch] = useStateValue();
     const userName = user.user.email;
@@ -61,14 +61,14 @@ function Chat() {
         }
       };
     
-    const  handleUploadStart = () => {
+    // const  handleUploadStart = () => {
 
-    }
-    const handleProgress = () => {
-    } 
+    // }
+    // const handleProgress = () => {
+    // } 
     
-    const handleUploadError = error => {
-    };
+    // const handleUploadError = error => {
+    // };
     const handleUploadSuccess = filename => {
 
         firebase
@@ -89,12 +89,14 @@ function Chat() {
         setavatar('')
     }
 
+    // to send message on enter press on textarea
     const onEnterPress = (e) => {
         if(e.keyCode === 13 && e.shiftKey === false) {
           sendMessage(e);
         }
     }
 
+    
   const scrollToBottom = () => {
     if (messagesEndRef) {
         messagesEndRef.current.addEventListener('DOMNodeInserted', event => {
@@ -105,22 +107,27 @@ function Chat() {
   }
 
     useEffect(() => {
-
+    // To fetch the user email from document id which is fetched from url params
     db.collection("chat")
     .where("emails", "array-contains", user.user.email)
     .get()
     .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          if (doc.data().emails[0] !== user.user.email) {
-            setChatUser(doc.data().emails[0]);
-          } else {
-            setChatUser(doc.data().emails[1]);
-          }
+            if (doc.id === documentId) {
+                if (doc.data().emails[0] !== user.user.email) {
+                    setChatUser(doc.data().emails[0]);
+                } else {
+                    setChatUser(doc.data().emails[1]);
+                }
+            }
         });
     })
     .catch((error) => {
         console.log("Error getting documents: ", error);
     });
+
+
+    // to fetch the chat meessage
     db.collection(`chat/${documentId}/chat_msg`)
         .orderBy("timestamp", "asc")
         .onSnapshot(snapshot => {
@@ -142,7 +149,7 @@ function Chat() {
 
     },[documentId])
 
-
+    // function to send the message
     const sendMessage = (e) => {
         e.preventDefault();
         if (input !== '') {
@@ -159,6 +166,8 @@ function Chat() {
         }
     }
 
+
+    // function to uploadthe image file
     const uploadImageFile  = (e) => {
         e.preventDefault();
         if (avatar !== '') {
@@ -177,7 +186,7 @@ function Chat() {
         }
     }
 
-    
+    // Function to add emojis
     const addEmoji = e => {
         let sym = e.unified.split('-')
         let codesArray = []
@@ -244,10 +253,10 @@ function Chat() {
                     name="avatar"
                     randomizeFilename
                     storageRef={firebase.storage().ref("images")}
-                    onUploadStart={handleUploadStart}
-                    onUploadError={handleUploadError}
+                    // onUploadStart={handleUploadStart}
+                    // onUploadError={handleUploadError}
                     onUploadSuccess={handleUploadSuccess}
-                    onProgress={handleProgress}
+                    // onProgress={handleProgress}
                 >
                     <AttachFileIcon/>
                 </CustomUploadButton>

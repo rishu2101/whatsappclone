@@ -1,11 +1,13 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
 const Suggestions = (props) => {
+
+    
+
     const options =   props.results.filter(result => result.includes(props.searchInput)).map(room => (
-        <li key={room}>
-            <Link to={`/${room}`} >
+        <li key={room} onClick={() => props.addNeChatBox(room)}>
+            {/* <Link to={`/${room}`} > */}
             {room}
-            </Link>
+            {/* </Link> */}
         </li>
     ))
   return <ul>{options}</ul>
